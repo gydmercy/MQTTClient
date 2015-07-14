@@ -27,7 +27,7 @@
 @property (nonatomic, strong) MQTTClient *client; // 客户端对象
 @property (nonatomic, strong) NSString *hostAddress; // 服务器IP地址
 
-@property (nonatomic, assign) NSString *serviceState;
+@property (nonatomic, assign) NSString *serviceState; // 服务开启状态
 
 @end
 
@@ -61,7 +61,7 @@
 }
 
 
-#pragma mark - getters
+#pragma mark - Initialization
 
 - (MQTTClient *)client {
     if (!_client) {
@@ -161,7 +161,7 @@
                     // 转换为 CustomView 模式
                     _hud.mode = MBProgressHUDModeCustomView;
                     _hud.labelText = @"连接成功";
-                    sleep(2);
+                    sleep(1);
                     [self hideHUD];
                 });
                 
@@ -199,7 +199,7 @@
                     // 转换为 CustomView 模式
                     _hud.mode = MBProgressHUDModeCustomView;
                     _hud.labelText = @"断开连接成功";
-                    sleep(2);
+                    sleep(1);
                     [self hideHUD];
                 });
                 
@@ -232,7 +232,9 @@
     UIButton *button = (UIButton *)sender;
     if (button == self.homeView.subscirbeButton) {
         SubscribeViewController *svc = [[SubscribeViewController alloc] init];
+        // 传值
         [svc setValue:_serviceState forKey:@"serviceState"];
+        [svc setValue:self.client forKey:@"client"];
         [self.navigationController pushViewController:svc animated:YES];
     } else if (button == self.homeView.publishButton) {
         PublishViewController *pvc = [[PublishViewController alloc] init];
