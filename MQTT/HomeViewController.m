@@ -10,6 +10,7 @@
 #import "MQTTKit.h"
 #import "MBProgressHUD.h"
 #import "HomeView.h"
+#import "HomeAlertViews.h"
 #import "SubscribeViewController.h"
 #import "PublishViewController.h"
 #import "HistoryViewController.h"
@@ -17,16 +18,11 @@
 @interface HomeViewController () <UITextFieldDelegate, UIAlertViewDelegate, MBProgressHUDDelegate>
 
 @property (nonatomic, strong) HomeView *homeView; // 主界面View
+@property (nonatomic, strong) HomeAlertViews *homeAlertView; // 相关AlertView
 @property (nonatomic, strong) MBProgressHUD *hud; // 提示框
-@property (nonatomic, strong) UIAlertView *configHostAlert; // 用来设置服务器IP地址
-@property (nonatomic, strong) UIAlertView *sureAlert; // 提示用户是否确定关闭服务
-@property (nonatomic, strong) UIAlertView *failedConnectAlert; // 提示用户开启服务失败
-@property (nonatomic, strong) UIAlertView *failedDisConnectAlert; // 提示用户关闭服务失败
-@property (nonatomic, strong) UITextField *ipTextField; // configHostAlertView中输入IP地址的TextField
 
 @property (nonatomic, strong) MQTTClient *client; // 客户端对象
 @property (nonatomic, strong) NSString *hostAddress; // 服务器IP地址
-
 @property (nonatomic, assign) NSString *serviceState; // 服务开启状态
 
 @end
@@ -39,22 +35,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor colorWithRed:235.0 / 255 green:235.0 / 255 blue:235.0 / 255 alpha:1.0];
     self.title = @"MQTT客户端";
-    
     // 设置子ViewController页面的返回按钮显示“返回”
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"返回"
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self
                                                                   action:nil];
     self.navigationItem.backBarButtonItem = backButton;
-    
-    _homeView = [[HomeView alloc] initWithFrame:self.view.bounds];
-    [_homeView.switchButton addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-    [_homeView.subscirbeButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [_homeView.publishButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [_homeView.historyButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_homeView];
+
+    [self initHomeView];
+    [self initAlertView];
     
     _serviceState = @"Service_Off";
     
@@ -63,67 +53,24 @@
 
 #pragma mark - Initialization
 
-- (MQTTClient *)client {
-    if (!_client) {
-        NSString *clientID = [[UIDevice currentDevice] identifierForVendor].UUIDString;
-        _client = [[MQTTClient alloc] initWithClientId:clientID];
-    }
-    return _client;
+- (void)initHomeView {
+    _homeView = [[HomeView alloc] initWithFrame:self.view.bounds];
+    [_homeView.switchButton addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
+    [_homeView.subscirbeButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [_homeView.publishButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [_homeView.historyButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_homeView];
 }
 
-
-- (UIAlertView *)configHostAlert {
-    if (!_configHostAlert) {
-        _configHostAlert = [[UIAlertView alloc] initWithTitle:@"请设置服务器IP"
-                                                          message:nil
-                                                         delegate:self
-                                                cancelButtonTitle:@"取消"
-                                                otherButtonTitles:@"确定", nil];
-        _configHostAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        
-        // 取出 AlertView 的输入框
-        _ipTextField = [_configHostAlert textFieldAtIndex:0];
-        _ipTextField.clearsOnBeginEditing = YES;
-        _ipTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _ipTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-        _ipTextField.returnKeyType = UIReturnKeyDone;
-        _ipTextField.delegate = self;
-    }
-    return _configHostAlert;
+- (void)initAlertView {
+    _homeAlertView = [[HomeAlertViews alloc] init];
+    _homeAlertView.configHostAlert.delegate = self;
+    _homeAlertView.sureAlert.delegate = self;
+    _homeAlertView.failedConnectAlert.delegate = self;
+    _homeAlertView.failedDisConnectAlert.delegate = self;
+    _homeAlertView.ipTextField.delegate = self;
 }
 
-- (UIAlertView *)sureAlert {
-    if (!_sureAlert) {
-        _sureAlert = [[UIAlertView alloc] initWithTitle:@"确定要关闭服务吗"
-                                                    message:nil
-                                                   delegate:self
-                                          cancelButtonTitle:@"取消"
-                                          otherButtonTitles:@"确定", nil];
-    }
-    return _sureAlert;
-}
-
-- (UIAlertView *)failedConnectAlert {
-    if (!_failedConnectAlert) {
-        _failedConnectAlert = [[UIAlertView alloc] initWithTitle:@"连接失败"
-                                                      message:@"开启服务不成功"
-                                                     delegate:self
-                                            cancelButtonTitle:nil
-                                            otherButtonTitles:@"确定", nil];
-    }
-    return _failedConnectAlert;
-}
-
-- (UIAlertView *)failedDisConnectAlert {
-    if (!_failedDisConnectAlert) {
-        _failedDisConnectAlert = [[UIAlertView alloc] initWithTitle:@"断开连接失败"
-                                                             message:@"关闭服务不成功"
-                                                            delegate:self
-                                                   cancelButtonTitle:nil
-                                                   otherButtonTitles:@"确定", nil];
-    }
-    return _failedDisConnectAlert;
-}
 
 
 #pragma mark - HUD
@@ -144,6 +91,14 @@
 
 #pragma mark - Connect / Disconnect
 
+- (MQTTClient *)client {
+    if (!_client) {
+        NSString *clientID = [[UIDevice currentDevice] identifierForVendor].UUIDString;
+        _client = [[MQTTClient alloc] initWithClientId:clientID];
+    }
+    return _client;
+}
+
 // 连接服务器
 - (void)connectToHost {
     
@@ -161,7 +116,7 @@
                 
                 // 更新 UI
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    _homeView.hostIP.text = _ipTextField.text;
+                    _homeView.hostIP.text = _homeAlertView.ipTextField.text;
                     
                     // 转换为 CustomView 模式
                     _hud.mode = MBProgressHUDModeCustomView;
@@ -174,7 +129,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self hideHUD];
                     [_homeView.switchButton setOn:NO animated:YES];
-                    [self.failedConnectAlert show];
+                    [_homeAlertView.failedConnectAlert show];
                 });
             }
         }];
@@ -213,7 +168,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self hideHUD];
                     [_homeView.switchButton setOn:YES animated:YES];
-                    [self.failedDisConnectAlert show];
+                    [_homeAlertView.failedDisConnectAlert show];
                 });
             }
         }];
@@ -228,9 +183,9 @@
     UISwitch *switchButton = (UISwitch *)sender;
     
     if (switchButton.on == YES) {
-        [self.configHostAlert show];
+        [_homeAlertView.configHostAlert show];
     } else {
-        [self.sureAlert show];
+        [_homeAlertView.sureAlert show];
     }
 }
 
@@ -267,7 +222,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    if (alertView == self.configHostAlert) {
+    if (alertView == _homeAlertView.configHostAlert) {
         
         switch (buttonIndex) {
             // 点击取消，则不开启服务
@@ -277,13 +232,13 @@
                 break;
             // 点击确定，则尝试连接服务器
             case 1:
-                _hostAddress = _ipTextField.text;
+                _hostAddress = _homeAlertView.ipTextField.text;
                 [self connectToHost];
                 break;
                 
         }
 
-    } else if (alertView == self.sureAlert) {
+    } else if (alertView == _homeAlertView.sureAlert) {
         
         switch (buttonIndex) {
             // 点击取消，则不关闭服务

@@ -16,7 +16,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        
+        // 设置背景色
+        self.backgroundColor = [UIColor colorWithRed:235.0 / 255 green:235.0 / 255 blue:235.0 / 255 alpha:1.0];
         
         // 开启服务底部View
         UIView *startView = [[UIView alloc] initWithFrame:CGRectMake(0, 84, self.frame.size.width, 50)];

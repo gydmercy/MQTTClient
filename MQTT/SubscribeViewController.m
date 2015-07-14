@@ -6,6 +6,7 @@
 //  Copyright (c) 2015年 Mercy. All rights reserved.
 //
 
+#import "SubscribeAlertView.h"
 #import "SubscribeViewController.h"
 #import "CustomNavigationController.h"
 #import "MBProgressHUD.h"
@@ -14,18 +15,15 @@
 @interface SubscribeViewController() <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) SubscribeAlertView *subscribeAlertView;
 @property (nonatomic, strong) MBProgressHUD *hud; // 提示框
-@property (nonatomic, strong) UIAlertView *addTopicAlert; // 用来输入要添加的主题
-@property (nonatomic, strong) UIAlertView *failedAddAlert; // 提示用户要先开启服务
-@property (nonatomic, strong) UIAlertView *failedSubscribeAlert; // 提示用户订阅失败
-@property (nonatomic, strong) UITextField *topicTextField; // addTopicAlert中填写主题名称的TextField
 
 @property (nonatomic, strong) MQTTClient *client; // 客户端对象
 @property (nonatomic, strong) NSString *topic; // 当前订阅的主题
 @property (nonatomic, strong) NSMutableArray *topicArray; // 可变已订阅主题
 @property (nonatomic, strong) NSArray *savedTopicArray; // 持久化已订阅主题
-
 @property (nonatomic, assign) NSString *serviceState; // 服务开启状态
+
 @end
 
 @implementation SubscribeViewController
@@ -47,6 +45,7 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     self.topicArray = [self.savedTopicArray mutableCopy];
     
     [self initTableView];
+    [self initSubscribeView];
     
 }
 
@@ -57,57 +56,20 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     _tableView.dataSource = self;
     _tableView.delegate = self;
-//    _tableView.tableHeaderView = [[UIView alloc] init];
     _tableView.tableFooterView = [[UIView alloc] init];
     [self.view addSubview:_tableView];
-    
-//    _tableView.backgroundColor = [UIColor redColor];
     
     // 注册TableViewCell
     [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifer];
 }
 
-- (UIAlertView *)addTopicAlert {
-    if (!_addTopicAlert) {
-        _addTopicAlert = [[UIAlertView alloc] initWithTitle:@"请输入要添加的主题"
-                                                    message:nil
-                                                    delegate:self
-                                           cancelButtonTitle:@"取消"
-                                           otherButtonTitles:@"确定", nil];
-        _addTopicAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        
-        // 取出 AlertView 的输入框
-        _topicTextField = [_addTopicAlert textFieldAtIndex:0];
-        _topicTextField.clearsOnBeginEditing = YES;
-        _topicTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _topicTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-        _topicTextField.returnKeyType = UIReturnKeyDone;
-        _topicTextField.delegate = self;
-    }
-    
-    return _addTopicAlert;
-}
-
-- (UIAlertView *)failedAddAlert {
-    if (!_failedAddAlert) {
-        _failedAddAlert = [[UIAlertView alloc] initWithTitle:@"请先开启服务"
-                                                     message:nil
-                                                    delegate:self
-                                            cancelButtonTitle:nil
-                                            otherButtonTitles:@"确定", nil];
-    }
-    return _failedAddAlert;
-}
-
-- (UIAlertView *)failedSubscribeAlert {
-    if (!_failedSubscribeAlert) {
-        _failedSubscribeAlert = [[UIAlertView alloc] initWithTitle:@"订阅失败"
-                                                         message:nil
-                                                        delegate:self
-                                               cancelButtonTitle:nil
-                                               otherButtonTitles:@"确定", nil];
-    }
-    return _failedSubscribeAlert;
+- (void)initSubscribeView {
+    _subscribeAlertView = [[SubscribeAlertView alloc] init];
+    _subscribeAlertView.addTopicAlert.delegate = self;
+    _subscribeAlertView.failedAddAlert.delegate = self;
+    _subscribeAlertView.failedSubscribeAlert.delegate = self;
+    _subscribeAlertView.failedUnsubscribeAlert.delegate = self;
+    _subscribeAlertView.topicTextField.delegate = self;
 }
 
 - (NSMutableArray *)topicArray {
@@ -167,13 +129,15 @@ static NSString *const cellIdentifer = @"cellIdentifier";
 }
 
 // 取消订阅某个主题
-- (void)unScribeTopic:(NSString *)topic {
+- (void)unscribeTopic:(NSString *)topic AtIndex:(NSIndexPath *)indexPath{
     [self showHUDWithText:@"取消订阅中..."];
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [_client unsubscribe:topic withCompletionHandler:^{
             // 更新 UI
             dispatch_async(dispatch_get_main_queue(), ^{
+                // 更新列表
+                [self deleteTopicAtIndex:indexPath];
                 
                 // 转换为 CustomView 模式
                 _hud.mode = MBProgressHUDModeCustomView;
@@ -208,9 +172,9 @@ static NSString *const cellIdentifer = @"cellIdentifier";
 // 点击右上角的 + 号，根据服务开启状况弹出不同的AlertView
 - (void)showAddTopicAlert:(id)sender {
     if ([_serviceState isEqualToString:@"Service_ON"]) {
-        [self.addTopicAlert show];
+        [_subscribeAlertView.addTopicAlert show];
     } else {
-        [self.failedAddAlert show];
+        [_subscribeAlertView.failedAddAlert show];
     }
     
 }
@@ -249,13 +213,11 @@ static NSString *const cellIdentifer = @"cellIdentifier";
         if ([_serviceState isEqualToString:@"Service_ON"]) {
             // 取出将要删除的Topic
             NSString *topicToDelete = [self.topicArray objectAtIndex:indexPath.row];
-            [self unScribeTopic:topicToDelete];
-            // 更新列表
-            [self deleteTopicAtIndex:indexPath];
+            [self unscribeTopic:topicToDelete AtIndex:indexPath];
         }
         // 未开启服务不得进行取消订阅操作
         else {
-            [self.failedAddAlert show];
+            [_subscribeAlertView.failedAddAlert show];
         }
         
         
@@ -272,12 +234,6 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     return titleWord;
 }
 
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 150, _tableView.frame.size.width, 30)];
-//    headerView.backgroundColor = [UIColor redColor];
-//    return headerView;
-//}
-
 
 #pragma mark - <UITextFieldDelegate>
 
@@ -291,7 +247,7 @@ static NSString *const cellIdentifer = @"cellIdentifier";
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    if (alertView == self.addTopicAlert) {
+    if (alertView == _subscribeAlertView.addTopicAlert) {
         
         switch (buttonIndex) {
             // 点击取消，则不增加主题
@@ -299,7 +255,7 @@ static NSString *const cellIdentifer = @"cellIdentifier";
                 break;
             // 点击确定，则尝试增加主题
             case 1:
-                _topic = _topicTextField.text;
+                _topic = _subscribeAlertView.topicTextField.text;
                 [self subscribeTopic];
                 break;
                 

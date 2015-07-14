@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4838DA591B552E2900D6F6E7 /* PublishView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4838DA581B552E2900D6F6E7 /* PublishView.m */; };
+		4838DA5C1B55342E00D6F6E7 /* HomeAlertViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 4838DA5B1B55342E00D6F6E7 /* HomeAlertViews.m */; };
+		4838DA5F1B55372800D6F6E7 /* SubscribeAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4838DA5E1B55372800D6F6E7 /* SubscribeAlertView.m */; };
 		484A28771B4F637700398C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 484A28761B4F637700398C49 /* main.m */; };
 		484A287A1B4F637700398C49 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 484A28791B4F637700398C49 /* AppDelegate.m */; };
 		484A28821B4F637700398C49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 484A28811B4F637700398C49 /* Images.xcassets */; };
@@ -32,6 +35,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4838DA571B552E2900D6F6E7 /* PublishView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishView.h; sourceTree = "<group>"; };
+		4838DA581B552E2900D6F6E7 /* PublishView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishView.m; sourceTree = "<group>"; };
+		4838DA5A1B55342E00D6F6E7 /* HomeAlertViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeAlertViews.h; sourceTree = "<group>"; };
+		4838DA5B1B55342E00D6F6E7 /* HomeAlertViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeAlertViews.m; sourceTree = "<group>"; };
+		4838DA5D1B55372800D6F6E7 /* SubscribeAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscribeAlertView.h; sourceTree = "<group>"; };
+		4838DA5E1B55372800D6F6E7 /* SubscribeAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubscribeAlertView.m; sourceTree = "<group>"; };
 		484A28711B4F637700398C49 /* MQTT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MQTT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		484A28751B4F637700398C49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		484A28761B4F637700398C49 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -170,6 +179,8 @@
 			children = (
 				48BBC4811B53D91C006CD7B5 /* SubscribeViewController.h */,
 				48BBC4821B53D91C006CD7B5 /* SubscribeViewController.m */,
+				4838DA5D1B55372800D6F6E7 /* SubscribeAlertView.h */,
+				4838DA5E1B55372800D6F6E7 /* SubscribeAlertView.m */,
 			);
 			name = Subscribe;
 			sourceTree = "<group>";
@@ -179,6 +190,8 @@
 			children = (
 				48BBC4841B53D941006CD7B5 /* PublishViewController.h */,
 				48BBC4851B53D941006CD7B5 /* PublishViewController.m */,
+				4838DA571B552E2900D6F6E7 /* PublishView.h */,
+				4838DA581B552E2900D6F6E7 /* PublishView.m */,
 			);
 			name = Publish;
 			sourceTree = "<group>";
@@ -190,6 +203,8 @@
 				48BBC48B1B53F586006CD7B5 /* HomeViewController.m */,
 				48BBC48D1B53F5ED006CD7B5 /* HomeView.h */,
 				48BBC48E1B53F5ED006CD7B5 /* HomeView.m */,
+				4838DA5A1B55342E00D6F6E7 /* HomeAlertViews.h */,
+				4838DA5B1B55342E00D6F6E7 /* HomeAlertViews.m */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -343,8 +358,11 @@
 				484A287A1B4F637700398C49 /* AppDelegate.m in Sources */,
 				48BBC4921B549F21006CD7B5 /* CustomNavigationController.m in Sources */,
 				48BBC4951B54DFE9006CD7B5 /* HistoryViewController.m in Sources */,
+				4838DA5F1B55372800D6F6E7 /* SubscribeAlertView.m in Sources */,
 				48BBC4861B53D941006CD7B5 /* PublishViewController.m in Sources */,
 				48BBC48F1B53F5ED006CD7B5 /* HomeView.m in Sources */,
+				4838DA5C1B55342E00D6F6E7 /* HomeAlertViews.m in Sources */,
+				4838DA591B552E2900D6F6E7 /* PublishView.m in Sources */,
 				484A28771B4F637700398C49 /* main.m in Sources */,
 				48BBC48C1B53F586006CD7B5 /* HomeViewController.m in Sources */,
 			);
