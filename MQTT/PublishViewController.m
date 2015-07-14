@@ -11,6 +11,7 @@
 @implementation PublishViewController
 
 - (void)viewDidLoad {
+    [super viewDidLoad];
     self.view.backgroundColor = [UIColor greenColor];
 }
 
