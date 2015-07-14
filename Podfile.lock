@@ -1,0 +1,22 @@
+PODS:
+  - MBProgressHUD (0.9.1)
+  - MQTTKit (0.1.0-next)
+
+DEPENDENCIES:
+  - MBProgressHUD (~> 0.9.1)
+  - MQTTKit (from `https://github.com/mobile-web-messaging/MQTTKit.git`)
+
+EXTERNAL SOURCES:
+  MQTTKit:
+    :git: https://github.com/mobile-web-messaging/MQTTKit.git
+
+CHECKOUT OPTIONS:
+  MQTTKit:
+    :commit: 94926fb58df6b43d53040d656da441bb2de402e9
+    :git: https://github.com/mobile-web-messaging/MQTTKit.git
+
+SPEC CHECKSUMS:
+  MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
+  MQTTKit: 513ffc31464db7adeffefac986e228fdf6cd87e5
+
+COCOAPODS: 0.37.2
