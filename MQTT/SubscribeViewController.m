@@ -42,8 +42,10 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     self.title = @"已订主题";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddTopicAlert:)];
     
+    // 取出持久化的数据变量，并赋值给动态变量
     self.savedTopicArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"subscribedTopics"];
     self.topicArray = [self.savedTopicArray mutableCopy];
+    
     [self initTableView];
     
 }
@@ -55,9 +57,14 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     _tableView.dataSource = self;
     _tableView.delegate = self;
-    [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifer];
+//    _tableView.tableHeaderView = [[UIView alloc] init];
     _tableView.tableFooterView = [[UIView alloc] init];
     [self.view addSubview:_tableView];
+    
+//    _tableView.backgroundColor = [UIColor redColor];
+    
+    // 注册TableViewCell
+    [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifer];
 }
 
 - (UIAlertView *)addTopicAlert {
@@ -146,11 +153,12 @@ static NSString *const cellIdentifer = @"cellIdentifier";
         [_client subscribe:_topic withCompletionHandler:^(NSArray *grantedQos){
             // 更新 UI
             dispatch_async(dispatch_get_main_queue(), ^{
+                // 更新列表
                 [self addTopic];
                 
                 // 转换为 CustomView 模式
                 _hud.mode = MBProgressHUDModeCustomView;
-                _hud.labelText = @"连接成功";
+                _hud.labelText = @"订阅成功";
                 sleep(1);
                 [self hideHUD];
             });
@@ -159,26 +167,45 @@ static NSString *const cellIdentifer = @"cellIdentifier";
 }
 
 // 取消订阅某个主题
-- (void)unScribeTopic {
+- (void)unScribeTopic:(NSString *)topic {
+    [self showHUDWithText:@"取消订阅中..."];
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [_client unsubscribe:topic withCompletionHandler:^{
+            // 更新 UI
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                // 转换为 CustomView 模式
+                _hud.mode = MBProgressHUDModeCustomView;
+                _hud.labelText = @"取消订阅成功";
+                sleep(1);
+                [self hideHUD];
+            });
+        }];
+    });
     
 }
 
-// 更新主题列表
+
+#pragma mark - Update TableView
+// 添加订阅的主题
 - (void)addTopic {
-    NSString *topic = _topic;
     
-    [self.topicArray addObject:topic];
-    self.savedTopicArray = [_topicArray mutableCopy];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:self.savedTopicArray forKey:@"subscribedTopics"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
+    [self.topicArray addObject:_topic];
+    [self saveCurrentTopics];
     [_tableView reloadData];
 }
 
+// 删除取消订阅的主题
+- (void)deleteTopicAtIndex:(NSIndexPath *)indexPath {
+    [self.topicArray removeObjectAtIndex:indexPath.row];
+    [self saveCurrentTopics];
+    [_tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+}
 
 #pragma mark - Actions
 
+// 点击右上角的 + 号，根据服务开启状况弹出不同的AlertView
 - (void)showAddTopicAlert:(id)sender {
     if ([_serviceState isEqualToString:@"Service_ON"]) {
         [self.addTopicAlert show];
@@ -186,6 +213,15 @@ static NSString *const cellIdentifer = @"cellIdentifier";
         [self.failedAddAlert show];
     }
     
+}
+
+// 持久化订阅的主题
+- (void)saveCurrentTopics {
+    self.savedTopicArray = [self.topicArray mutableCopy];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:self.savedTopicArray forKey:@"subscribedTopics"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
 }
 
 
@@ -204,6 +240,43 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     
     return cell;
 }
+
+
+#pragma mark - <UITableViewDelegate>
+// 滑动删除
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        if ([_serviceState isEqualToString:@"Service_ON"]) {
+            // 取出将要删除的Topic
+            NSString *topicToDelete = [self.topicArray objectAtIndex:indexPath.row];
+            [self unScribeTopic:topicToDelete];
+            // 更新列表
+            [self deleteTopicAtIndex:indexPath];
+        }
+        // 未开启服务不得进行取消订阅操作
+        else {
+            [self.failedAddAlert show];
+        }
+        
+        
+        
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 30;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSString *titleWord = @"点击 + 订阅新的主题，右滑取消订阅相关主题";
+    return titleWord;
+}
+
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 150, _tableView.frame.size.width, 30)];
+//    headerView.backgroundColor = [UIColor redColor];
+//    return headerView;
+//}
 
 
 #pragma mark - <UITextFieldDelegate>

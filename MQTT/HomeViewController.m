@@ -152,6 +152,11 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [self.client connectToHost:_hostAddress completionHandler:^(MQTTConnectionReturnCode code) {
             if (code == ConnectionAccepted) {
+                
+                // 清空已订阅列表
+                [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"subscribedTopics"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
                 _serviceState = @"Service_ON";
                 
                 // 更新 UI
@@ -186,6 +191,7 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [self.client disconnectWithCompletionHandler:^(NSUInteger code) {
             if (code == ConnectionAccepted) {
+                
                 // 清空已订阅列表
                 [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"subscribedTopics"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
