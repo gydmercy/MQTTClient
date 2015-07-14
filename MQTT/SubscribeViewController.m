@@ -129,7 +129,7 @@ static NSString *const cellIdentifer = @"cellIdentifier";
 }
 
 // 取消订阅某个主题
-- (void)unscribeTopic:(NSString *)topic AtIndex:(NSIndexPath *)indexPath{
+- (void)unscribeTopic:(NSString *)topic atIndex:(NSIndexPath *)indexPath{
     [self showHUDWithText:@"取消订阅中..."];
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -213,7 +213,7 @@ static NSString *const cellIdentifer = @"cellIdentifier";
         if ([_serviceState isEqualToString:@"Service_ON"]) {
             // 取出将要删除的Topic
             NSString *topicToDelete = [self.topicArray objectAtIndex:indexPath.row];
-            [self unscribeTopic:topicToDelete AtIndex:indexPath];
+            [self unscribeTopic:topicToDelete atIndex:indexPath];
         }
         // 未开启服务不得进行取消订阅操作
         else {

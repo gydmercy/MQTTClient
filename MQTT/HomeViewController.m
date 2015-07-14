@@ -46,6 +46,7 @@
     [self initHomeView];
     [self initAlertView];
     
+    // 默认服务是关闭状态
     _serviceState = @"Service_Off";
     
 }
@@ -199,6 +200,9 @@
         [self.navigationController pushViewController:svc animated:YES];
     } else if (button == self.homeView.publishButton) {
         PublishViewController *pvc = [[PublishViewController alloc] init];
+        // 传值
+        [pvc setValue:_serviceState forKey:@"serviceState"];
+        [pvc setValue:self.client forKey:@"client"];
         [self.navigationController pushViewController:pvc animated:YES];
     } else if (button == self.homeView.historyButton) {
         HistoryViewController *hvc = [[HistoryViewController alloc] init];

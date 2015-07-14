@@ -11,5 +11,6 @@
 @interface PublishView : UIView
 
 @property (nonatomic, strong) UITextField *topicTextField;
+@property (nonatomic, strong) UITextView *contentText;
 
 @end
