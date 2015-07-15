@@ -30,15 +30,15 @@
     return _addTopicAlert;
 }
 
-- (UIAlertView *)failedAddAlert {
-    if (!_failedAddAlert) {
-        _failedAddAlert = [[UIAlertView alloc] initWithTitle:@"请先开启服务"
+- (UIAlertView *)failedToDoAlert {
+    if (!_failedToDoAlert) {
+        _failedToDoAlert = [[UIAlertView alloc] initWithTitle:@"请先开启服务"
                                                      message:nil
                                                     delegate:nil
                                            cancelButtonTitle:nil
                                            otherButtonTitles:@"确定", nil];
     }
-    return _failedAddAlert;
+    return _failedToDoAlert;
 }
 
 - (UIAlertView *)failedSubscribeAlert {

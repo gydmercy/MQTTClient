@@ -45,7 +45,7 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     self.topicArray = [self.savedTopicArray mutableCopy];
     
     [self initTableView];
-    [self initSubscribeView];
+    [self initSubscribeAlert];
     
 }
 
@@ -63,10 +63,10 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifer];
 }
 
-- (void)initSubscribeView {
+- (void)initSubscribeAlert {
     _subscribeAlertView = [[SubscribeAlertView alloc] init];
     _subscribeAlertView.addTopicAlert.delegate = self;
-    _subscribeAlertView.failedAddAlert.delegate = self;
+    _subscribeAlertView.failedToDoAlert.delegate = self;
     _subscribeAlertView.failedSubscribeAlert.delegate = self;
     _subscribeAlertView.failedUnsubscribeAlert.delegate = self;
     _subscribeAlertView.topicTextField.delegate = self;
@@ -174,7 +174,7 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     if ([_serviceState isEqualToString:@"Service_ON"]) {
         [_subscribeAlertView.addTopicAlert show];
     } else {
-        [_subscribeAlertView.failedAddAlert show];
+        [_subscribeAlertView.failedToDoAlert show];
     }
     
 }
@@ -217,7 +217,7 @@ static NSString *const cellIdentifer = @"cellIdentifier";
         }
         // 未开启服务不得进行取消订阅操作
         else {
-            [_subscribeAlertView.failedAddAlert show];
+            [_subscribeAlertView.failedToDoAlert show];
         }
         
         

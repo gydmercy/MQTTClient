@@ -25,6 +25,8 @@
 @property (nonatomic, strong) NSString *hostAddress; // 服务器IP地址
 @property (nonatomic, assign) NSString *serviceState; // 服务开启状态
 
+//@property (nonatomic, strong) UIAlertView *messageReceivedAlert;
+
 @end
 
 @implementation HomeViewController
@@ -44,10 +46,13 @@
     self.navigationItem.backBarButtonItem = backButton;
 
     [self initHomeView];
-    [self initAlertView];
+    [self initHomeAlert];
+    
+    [self setupMessageHandler];
     
     // 默认服务是关闭状态
     _serviceState = @"Service_Off";
+    
     
 }
 
@@ -63,7 +68,7 @@
     [self.view addSubview:_homeView];
 }
 
-- (void)initAlertView {
+- (void)initHomeAlert {
     _homeAlertView = [[HomeAlertViews alloc] init];
     _homeAlertView.configHostAlert.delegate = self;
     _homeAlertView.sureAlert.delegate = self;
@@ -71,7 +76,6 @@
     _homeAlertView.failedDisConnectAlert.delegate = self;
     _homeAlertView.ipTextField.delegate = self;
 }
-
 
 
 #pragma mark - HUD
@@ -90,7 +94,7 @@
 }
 
 
-#pragma mark - Connect / Disconnect
+#pragma mark - Client & MessageHandler
 
 - (MQTTClient *)client {
     if (!_client) {
@@ -99,6 +103,29 @@
     }
     return _client;
 }
+
+- (void)setupMessageHandler {
+    
+    [self.client setMessageHandler:^(MQTTMessage *message) {
+        NSString *text = message.payloadString;
+        NSLog(@"text --->> %@",text);
+        
+        UIAlertView *messageReceivedAlert = [[UIAlertView alloc] initWithTitle:@"接收到新消息"
+                                                                       message:text
+                                                                      delegate:nil
+                                                             cancelButtonTitle:nil
+                                                             otherButtonTitles:@"确定", nil];
+        // 主线程弹框
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [messageReceivedAlert show];
+        });
+        
+    }];
+}
+
+
+
+#pragma mark - Connect / Disconnect
 
 // 连接服务器
 - (void)connectToHost {
