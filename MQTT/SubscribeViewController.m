@@ -66,9 +66,6 @@ static NSString *const cellIdentifer = @"cellIdentifier";
 - (void)initSubscribeAlert {
     _subscribeAlertView = [[SubscribeAlertView alloc] init];
     _subscribeAlertView.addTopicAlert.delegate = self;
-    _subscribeAlertView.failedToDoAlert.delegate = self;
-    _subscribeAlertView.failedSubscribeAlert.delegate = self;
-    _subscribeAlertView.failedUnsubscribeAlert.delegate = self;
     _subscribeAlertView.topicTextField.delegate = self;
 }
 
@@ -111,10 +108,17 @@ static NSString *const cellIdentifer = @"cellIdentifier";
 - (void)subscribeTopic {
     [self showHUDWithText:@"订阅中..."];
     
+    // 创建定时器，控制请求时长
+    NSTimer *subscribeTimer = [NSTimer timerWithTimeInterval:10 target:self selector:@selector(subscribeTimeoutAction) userInfo:nil repeats:NO];
+    [[NSRunLoop currentRunLoop] addTimer:subscribeTimer forMode:NSDefaultRunLoopMode];
+    
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [_client subscribe:_topic withCompletionHandler:^(NSArray *grantedQos){
             // 更新 UI
             dispatch_async(dispatch_get_main_queue(), ^{
+                // 移除定时器
+                [subscribeTimer invalidate];
+                
                 // 更新列表
                 [self addTopic];
                 
@@ -132,10 +136,17 @@ static NSString *const cellIdentifer = @"cellIdentifier";
 - (void)unscribeTopic:(NSString *)topic atIndex:(NSIndexPath *)indexPath{
     [self showHUDWithText:@"取消订阅中..."];
     
+    // 创建定时器，控制请求时长
+    NSTimer *unsubscribeTimer = [NSTimer timerWithTimeInterval:10 target:self selector:@selector(unsubscribeTimeoutAction) userInfo:nil repeats:NO];
+    [[NSRunLoop currentRunLoop] addTimer:unsubscribeTimer forMode:NSDefaultRunLoopMode];
+    
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [_client unsubscribe:topic withCompletionHandler:^{
             // 更新 UI
             dispatch_async(dispatch_get_main_queue(), ^{
+                // 移除定时器
+                [unsubscribeTimer invalidate];
+                
                 // 更新列表
                 [self deleteTopicAtIndex:indexPath];
                 
@@ -178,6 +189,17 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     }
     
 }
+
+- (void)subscribeTimeoutAction {
+    [self hideHUD];
+    [_subscribeAlertView.failedSubscribeAlert show];
+}
+
+- (void)unsubscribeTimeoutAction {
+    [self hideHUD];
+    [_subscribeAlertView.failedUnsubscribeAlert show];
+}
+
 
 // 持久化订阅的主题
 - (void)saveCurrentTopics {

@@ -104,6 +104,71 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4838DA631B5630BC00D6F6E7 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				48BBC48A1B53F586006CD7B5 /* HomeViewController.h */,
+				48BBC48B1B53F586006CD7B5 /* HomeViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		4838DA641B5630CC00D6F6E7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				48BBC48D1B53F5ED006CD7B5 /* HomeView.h */,
+				48BBC48E1B53F5ED006CD7B5 /* HomeView.m */,
+				4838DA5A1B55342E00D6F6E7 /* HomeAlertViews.h */,
+				4838DA5B1B55342E00D6F6E7 /* HomeAlertViews.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		4838DA651B5630D800D6F6E7 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				48BBC4811B53D91C006CD7B5 /* SubscribeViewController.h */,
+				48BBC4821B53D91C006CD7B5 /* SubscribeViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		4838DA661B5630E200D6F6E7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4838DA5D1B55372800D6F6E7 /* SubscribeAlertView.h */,
+				4838DA5E1B55372800D6F6E7 /* SubscribeAlertView.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		4838DA671B5630EC00D6F6E7 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				48BBC4841B53D941006CD7B5 /* PublishViewController.h */,
+				48BBC4851B53D941006CD7B5 /* PublishViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		4838DA681B5630F500D6F6E7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4838DA571B552E2900D6F6E7 /* PublishView.h */,
+				4838DA581B552E2900D6F6E7 /* PublishView.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		4838DA691B5630FE00D6F6E7 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				48BBC4931B54DFE9006CD7B5 /* HistoryViewController.h */,
+				48BBC4941B54DFE9006CD7B5 /* HistoryViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
 		484A28681B4F637700398C49 = {
 			isa = PBXGroup;
 			children = (
@@ -168,8 +233,7 @@
 		48BBC4961B54DFF7006CD7B5 /* History */ = {
 			isa = PBXGroup;
 			children = (
-				48BBC4931B54DFE9006CD7B5 /* HistoryViewController.h */,
-				48BBC4941B54DFE9006CD7B5 /* HistoryViewController.m */,
+				4838DA691B5630FE00D6F6E7 /* Controller */,
 			);
 			name = History;
 			sourceTree = "<group>";
@@ -177,10 +241,8 @@
 		48BBC4971B54E000006CD7B5 /* Subscribe */ = {
 			isa = PBXGroup;
 			children = (
-				48BBC4811B53D91C006CD7B5 /* SubscribeViewController.h */,
-				48BBC4821B53D91C006CD7B5 /* SubscribeViewController.m */,
-				4838DA5D1B55372800D6F6E7 /* SubscribeAlertView.h */,
-				4838DA5E1B55372800D6F6E7 /* SubscribeAlertView.m */,
+				4838DA651B5630D800D6F6E7 /* Controller */,
+				4838DA661B5630E200D6F6E7 /* View */,
 			);
 			name = Subscribe;
 			sourceTree = "<group>";
@@ -188,10 +250,8 @@
 		48BBC4981B54E00C006CD7B5 /* Publish */ = {
 			isa = PBXGroup;
 			children = (
-				48BBC4841B53D941006CD7B5 /* PublishViewController.h */,
-				48BBC4851B53D941006CD7B5 /* PublishViewController.m */,
-				4838DA571B552E2900D6F6E7 /* PublishView.h */,
-				4838DA581B552E2900D6F6E7 /* PublishView.m */,
+				4838DA671B5630EC00D6F6E7 /* Controller */,
+				4838DA681B5630F500D6F6E7 /* View */,
 			);
 			name = Publish;
 			sourceTree = "<group>";
@@ -199,12 +259,8 @@
 		48BBC4991B54E0C5006CD7B5 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				48BBC48A1B53F586006CD7B5 /* HomeViewController.h */,
-				48BBC48B1B53F586006CD7B5 /* HomeViewController.m */,
-				48BBC48D1B53F5ED006CD7B5 /* HomeView.h */,
-				48BBC48E1B53F5ED006CD7B5 /* HomeView.m */,
-				4838DA5A1B55342E00D6F6E7 /* HomeAlertViews.h */,
-				4838DA5B1B55342E00D6F6E7 /* HomeAlertViews.m */,
+				4838DA631B5630BC00D6F6E7 /* Controller */,
+				4838DA641B5630CC00D6F6E7 /* View */,
 			);
 			name = Home;
 			sourceTree = "<group>";

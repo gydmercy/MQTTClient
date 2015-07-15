@@ -52,15 +52,27 @@
     return _failedConnectAlert;
 }
 
-- (UIAlertView *)failedDisConnectAlert {
-    if (!_failedDisConnectAlert) {
-        _failedDisConnectAlert = [[UIAlertView alloc] initWithTitle:@"断开连接失败"
+- (UIAlertView *)wrongAddressAlert {
+    if (!_wrongAddressAlert) {
+        _wrongAddressAlert = [[UIAlertView alloc] initWithTitle:@"连接失败"
+                                                         message:@"请检查服务器地址后重试"
+                                                        delegate:nil
+                                               cancelButtonTitle:nil
+                                               otherButtonTitles:@"确定", nil];
+    }
+    return _wrongAddressAlert;
+}
+
+
+- (UIAlertView *)failedDisconnectAlert {
+    if (!_failedDisconnectAlert) {
+        _failedDisconnectAlert = [[UIAlertView alloc] initWithTitle:@"断开连接失败"
                                                             message:@"关闭服务不成功"
                                                            delegate:nil
                                                   cancelButtonTitle:nil
                                                   otherButtonTitles:@"确定", nil];
     }
-    return _failedDisConnectAlert;
+    return _failedDisconnectAlert;
 }
 
 

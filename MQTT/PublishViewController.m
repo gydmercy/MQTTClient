@@ -34,7 +34,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发布"
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
-                                                                             action:@selector(publishAction:)];
+                                                                             action:@selector(publishButtonAction:)];
     
     [self initPublishView];
 
@@ -79,9 +79,13 @@
 
 
 #pragma mark - Publish
-
+// 发布消息
 - (void)publishMessage:(NSString *)message toTopic:(NSString *)topic {
     [self showHUDWithText:@"发布中..."];
+    
+    // 创建定时器，控制请求时长
+    NSTimer *publishTimer = [NSTimer timerWithTimeInterval:10 target:self selector:@selector(publishTimeoutAction) userInfo:nil repeats:NO];
+    [[NSRunLoop currentRunLoop] addTimer:publishTimer forMode:NSDefaultRunLoopMode];
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [_client publishString:message
@@ -89,6 +93,9 @@
                         withQos:AtMostOnce
                         retain:YES
              completionHandler:^(int mid){
+                 // 移除定时器
+                 [publishTimer invalidate];
+                 
                  // 更新 UI
                  dispatch_async(dispatch_get_main_queue(), ^{
                      
@@ -106,7 +113,7 @@
 
 #pragma mark - Actions
 
-- (void)publishAction:(id)sender {
+- (void)publishButtonAction:(id)sender {
     if ([_serviceState isEqualToString:@"Service_ON"]) {
         
         NSString *topic = _publishView.topicTextField.text;
@@ -116,6 +123,18 @@
     } else {
         [self.failedPublishAlert show];
     }
+}
+
+
+- (void)publishTimeoutAction {
+    [self hideHUD];
+    
+    UIAlertView *failedPublish = [[UIAlertView alloc] initWithTitle:@"发布失败"
+                                                            message:@"请检查网络后重试"
+                                                           delegate:self
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"确定", nil];
+    [failedPublish show];
 }
 
 #pragma mark - <UITextFieldDelegate>

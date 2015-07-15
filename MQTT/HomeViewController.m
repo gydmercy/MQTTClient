@@ -15,6 +15,7 @@
 #import "PublishViewController.h"
 #import "HistoryViewController.h"
 
+
 @interface HomeViewController () <UITextFieldDelegate, UIAlertViewDelegate, MBProgressHUDDelegate>
 
 @property (nonatomic, strong) HomeView *homeView; // 主界面View
@@ -24,8 +25,6 @@
 @property (nonatomic, strong) MQTTClient *client; // 客户端对象
 @property (nonatomic, strong) NSString *hostAddress; // 服务器IP地址
 @property (nonatomic, assign) NSString *serviceState; // 服务开启状态
-
-//@property (nonatomic, strong) UIAlertView *messageReceivedAlert;
 
 @end
 
@@ -72,8 +71,6 @@
     _homeAlertView = [[HomeAlertViews alloc] init];
     _homeAlertView.configHostAlert.delegate = self;
     _homeAlertView.sureAlert.delegate = self;
-    _homeAlertView.failedConnectAlert.delegate = self;
-    _homeAlertView.failedDisConnectAlert.delegate = self;
     _homeAlertView.ipTextField.delegate = self;
 }
 
@@ -96,6 +93,7 @@
 
 #pragma mark - Client & MessageHandler
 
+// 获取客户端对象
 - (MQTTClient *)client {
     if (!_client) {
         NSString *clientID = [[UIDevice currentDevice] identifierForVendor].UUIDString;
@@ -104,11 +102,12 @@
     return _client;
 }
 
+// 设置消息处理
 - (void)setupMessageHandler {
     
     [self.client setMessageHandler:^(MQTTMessage *message) {
         NSString *text = message.payloadString;
-        NSLog(@"text --->> %@",text);
+//        NSLog(@"text --->> %@",text);
         
         UIAlertView *messageReceivedAlert = [[UIAlertView alloc] initWithTitle:@"接收到新消息"
                                                                        message:text
@@ -124,7 +123,6 @@
 }
 
 
-
 #pragma mark - Connect / Disconnect
 
 // 连接服务器
@@ -132,8 +130,14 @@
     
     [self showHUDWithText:@"连接中..."];
     
+    // 创建定时器，控制请求时长
+    NSTimer *connectTimer = [NSTimer timerWithTimeInterval:10 target:self selector:@selector(connectTimeoutAction) userInfo:nil repeats:NO];
+    [[NSRunLoop currentRunLoop] addTimer:connectTimer forMode:NSDefaultRunLoopMode];
+    
+    // 异步连接服务器
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [self.client connectToHost:_hostAddress completionHandler:^(MQTTConnectionReturnCode code) {
+            // 连接成功
             if (code == ConnectionAccepted) {
                 
                 // 清空已订阅列表
@@ -144,6 +148,9 @@
                 
                 // 更新 UI
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    // 移除定时器
+                    [connectTimer invalidate];
+                    
                     _homeView.hostIP.text = _homeAlertView.ipTextField.text;
                     
                     // 转换为 CustomView 模式
@@ -167,9 +174,13 @@
 }
 
 // 断开服务器连接
-- (void)disConnectToHost {
+- (void)disconnectToHost {
     
     [self showHUDWithText:@"断开连接中..."];
+    
+    // 创建定时器，控制请求时长
+    NSTimer *disconnectTimer = [NSTimer timerWithTimeInterval:10 target:self selector:@selector(disconnectTimeoutAction) userInfo:nil repeats:NO];
+    [[NSRunLoop currentRunLoop] addTimer:disconnectTimer forMode:NSDefaultRunLoopMode];
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [self.client disconnectWithCompletionHandler:^(NSUInteger code) {
@@ -183,9 +194,12 @@
                 
                 // 更新 UI
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    // 移除定时器
+                    [disconnectTimer invalidate];
+                    
                     _homeView.hostIP.text = @"——";
                     
-                    // 转换为 CustomView 模式
+                    //转换为 CustomView 模式
                     _hud.mode = MBProgressHUDModeCustomView;
                     _hud.labelText = @"断开连接成功";
                     sleep(1);
@@ -196,7 +210,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self hideHUD];
                     [_homeView.switchButton setOn:YES animated:YES];
-                    [_homeAlertView.failedDisConnectAlert show];
+                    [_homeAlertView.failedDisconnectAlert show];
                 });
             }
         }];
@@ -206,7 +220,7 @@
 
 
 #pragma mark - Actions
-// 滑动开关动作
+// 滑动开关触发动作
 - (void)switchAction:(id)sender {
     UISwitch *switchButton = (UISwitch *)sender;
     
@@ -217,6 +231,7 @@
     }
 }
 
+// 相关按钮触发动作
 - (void)buttonAction:(id)sender {
     UIButton *button = (UIButton *)sender;
     if (button == self.homeView.subscirbeButton) {
@@ -237,6 +252,20 @@
 
     }
     
+}
+
+// 连接服务器超时触发动作
+- (void)connectTimeoutAction {
+    [self hideHUD];
+    [_homeView.switchButton setOn:NO animated:YES];
+    [_homeAlertView.wrongAddressAlert show];
+}
+
+// 断开服务器超时触发动作
+- (void)disconnectTimeoutAction {
+    [self hideHUD];
+    [_homeView.switchButton setOn:YES animated:YES];
+    [_homeAlertView.failedDisconnectAlert show];
 }
 
 
@@ -278,7 +307,7 @@
                 break;
             // 点击确定，则尝试断开服务器连接
             case 1:
-                [self disConnectToHost];
+                [self disconnectToHost];
                 break;
                 
         }

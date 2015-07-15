@@ -44,7 +44,7 @@
 - (UIAlertView *)failedSubscribeAlert {
     if (!_failedSubscribeAlert) {
         _failedSubscribeAlert = [[UIAlertView alloc] initWithTitle:@"订阅失败"
-                                                           message:nil
+                                                           message:@"请检查网络后重试"
                                                           delegate:nil
                                                  cancelButtonTitle:nil
                                                  otherButtonTitles:@"确定", nil];
@@ -55,7 +55,7 @@
 -(UIAlertView *)failedUnsubscribeAlert {
     if (!_failedUnsubscribeAlert) {
         _failedUnsubscribeAlert = [[UIAlertView alloc] initWithTitle:@"取消订阅失败"
-                                                           message:nil
+                                                           message:@"请检查网络后重试"
                                                           delegate:nil
                                                  cancelButtonTitle:nil
                                                  otherButtonTitles:@"确定", nil];
