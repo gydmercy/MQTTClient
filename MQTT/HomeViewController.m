@@ -14,6 +14,8 @@
 #import "SubscribeViewController.h"
 #import "PublishViewController.h"
 #import "HistoryViewController.h"
+#import "AppDelegate.h"
+#import "Message.h"
 
 
 @interface HomeViewController () <UITextFieldDelegate, UIAlertViewDelegate, MBProgressHUDDelegate>
@@ -25,6 +27,8 @@
 @property (nonatomic, strong) MQTTClient *client; // 客户端对象
 @property (nonatomic, strong) NSString *hostAddress; // 服务器IP地址
 @property (nonatomic, assign) NSString *serviceState; // 服务开启状态
+
+@property (nonatomic, strong) NSManagedObjectContext *context; // Core Data 上下文
 
 @end
 
@@ -74,6 +78,15 @@
     _homeAlertView.ipTextField.delegate = self;
 }
 
+// 获得 NSManagedObjectContext 对象
+- (NSManagedObjectContext *)context {
+    if (!_context) {
+        AppDelegate *appdelegate = [UIApplication sharedApplication].delegate;
+        _context = appdelegate.managedObjectContext;
+    }
+    return _context;
+}
+
 
 #pragma mark - HUD
 
@@ -105,12 +118,17 @@
 // 设置消息处理
 - (void)setupMessageHandler {
     
+    __weak typeof(self) sf = self;
     [self.client setMessageHandler:^(MQTTMessage *message) {
-        NSString *text = message.payloadString;
-//        NSLog(@"text --->> %@",text);
+        NSString *content = message.payloadString;
+//        NSLog(@"text --->> %@",content);
+        
+        // 存入数据库
+        [sf addMessageToDBWithContent:content];
+        
         
         UIAlertView *messageReceivedAlert = [[UIAlertView alloc] initWithTitle:@"接收到新消息"
-                                                                       message:text
+                                                                       message:content
                                                                       delegate:nil
                                                              cancelButtonTitle:nil
                                                              otherButtonTitles:@"确定", nil];
@@ -267,6 +285,23 @@
     [_homeView.switchButton setOn:YES animated:YES];
     [_homeAlertView.failedDisconnectAlert show];
 }
+
+#pragma mark - Core Data
+
+- (void)addMessageToDBWithContent:(NSString *)content {
+    Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:self.context];
+    
+    message.content = content;
+    message.date = [NSDate date];
+    message.type = @"接收";
+    
+    NSError *error = nil;
+    if (![self.context save:&error]) {
+        NSLog(@"存储消息错误，ERROR：%@",error);
+    }
+    
+}
+
 
 
 #pragma mark - <UITextFieldDelegate>

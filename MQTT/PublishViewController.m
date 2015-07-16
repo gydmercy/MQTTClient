@@ -10,6 +10,8 @@
 #import "PublishView.h"
 #import "MBProgressHUD.h"
 #import "MQTTKit.h"
+#import "AppDelegate.h"
+#import "Message.h"
 
 @interface PublishViewController() <UITextFieldDelegate, UITextViewDelegate>
 
@@ -19,6 +21,8 @@
 
 @property (nonatomic, strong) MQTTClient *client; // 客户端对象
 @property (nonatomic, assign) NSString *serviceState; // 服务开启状态
+
+@property (nonatomic, strong) NSManagedObjectContext *context; // Core Data 上下文
 
 @end
 
@@ -61,6 +65,15 @@
     return _failedPublishAlert;
 }
 
+// 获得 NSManagedObjectContext 对象
+- (NSManagedObjectContext *)context {
+    if (!_context) {
+        AppDelegate *appdelegate = [UIApplication sharedApplication].delegate;
+        _context = appdelegate.managedObjectContext;
+    }
+    return _context;
+}
+
 
 #pragma mark - HUD
 
@@ -80,21 +93,25 @@
 
 #pragma mark - Publish
 // 发布消息
-- (void)publishMessage:(NSString *)message toTopic:(NSString *)topic {
+- (void)publishMessage:(NSString *)content toTopic:(NSString *)topic {
     [self showHUDWithText:@"发布中..."];
     
     // 创建定时器，控制请求时长
     NSTimer *publishTimer = [NSTimer timerWithTimeInterval:10 target:self selector:@selector(publishTimeoutAction) userInfo:nil repeats:NO];
     [[NSRunLoop currentRunLoop] addTimer:publishTimer forMode:NSDefaultRunLoopMode];
     
+    __weak typeof(self) sf = self;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [_client publishString:message
+        [_client publishString:content
                         toTopic:topic
                         withQos:AtMostOnce
                         retain:YES
              completionHandler:^(int mid){
                  // 移除定时器
                  [publishTimer invalidate];
+                 
+                 // 存入数据库
+                 [sf addMessageToDBWithContent:content];
                  
                  // 更新 UI
                  dispatch_async(dispatch_get_main_queue(), ^{
@@ -137,12 +154,28 @@
     [failedPublish show];
 }
 
-#pragma mark - <UITextFieldDelegate>
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder]; // 键盘隐藏
+#pragma mark - Core Data
+
+- (void)addMessageToDBWithContent:(NSString *)content {
+    Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:self.context];
     
-    return YES;
+    message.content = content;
+    message.date = [NSDate date];
+    message.type = @"发布";
+    
+    NSError *error = nil;
+    if (![self.context save:&error]) {
+        NSLog(@"存储消息错误，ERROR：%@",error);
+    }
+    
+}
+
+
+#pragma mark - Others
+// 键盘隐藏
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 

@@ -15,6 +15,9 @@
 		484A28821B4F637700398C49 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 484A28811B4F637700398C49 /* Images.xcassets */; };
 		484A28851B4F637700398C49 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 484A28831B4F637700398C49 /* LaunchScreen.xib */; };
 		484A28911B4F637700398C49 /* MQTTTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 484A28901B4F637700398C49 /* MQTTTests.m */; };
+		484ADB5C1B57A6B000573394 /* MQTT.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 484ADB5A1B57A6B000573394 /* MQTT.xcdatamodeld */; };
+		484ADB651B57A79800573394 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 484ADB641B57A79800573394 /* Message.m */; };
+		484ADB681B57C0BC00573394 /* HistoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 484ADB671B57C0BC00573394 /* HistoryTableViewCell.m */; };
 		48BBC4831B53D91C006CD7B5 /* SubscribeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC4821B53D91C006CD7B5 /* SubscribeViewController.m */; };
 		48BBC4861B53D941006CD7B5 /* PublishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC4851B53D941006CD7B5 /* PublishViewController.m */; };
 		48BBC48C1B53F586006CD7B5 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC48B1B53F586006CD7B5 /* HomeViewController.m */; };
@@ -51,6 +54,11 @@
 		484A288A1B4F637700398C49 /* MQTTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MQTTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		484A288F1B4F637700398C49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		484A28901B4F637700398C49 /* MQTTTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MQTTTests.m; sourceTree = "<group>"; };
+		484ADB5B1B57A6B000573394 /* MQTT.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MQTT.xcdatamodel; sourceTree = "<group>"; };
+		484ADB631B57A79800573394 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		484ADB641B57A79800573394 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
+		484ADB661B57C0BC00573394 /* HistoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryTableViewCell.h; sourceTree = "<group>"; };
+		484ADB671B57C0BC00573394 /* HistoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTableViewCell.m; sourceTree = "<group>"; };
 		48BBC4811B53D91C006CD7B5 /* SubscribeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscribeViewController.h; sourceTree = "<group>"; };
 		48BBC4821B53D91C006CD7B5 /* SubscribeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubscribeViewController.m; sourceTree = "<group>"; };
 		48BBC4841B53D941006CD7B5 /* PublishViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishViewController.h; sourceTree = "<group>"; };
@@ -230,10 +238,31 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		484ADB591B57A54000573394 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				484ADB5A1B57A6B000573394 /* MQTT.xcdatamodeld */,
+				484ADB631B57A79800573394 /* Message.h */,
+				484ADB641B57A79800573394 /* Message.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		484ADB691B57C0D000573394 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				484ADB661B57C0BC00573394 /* HistoryTableViewCell.h */,
+				484ADB671B57C0BC00573394 /* HistoryTableViewCell.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		48BBC4961B54DFF7006CD7B5 /* History */ = {
 			isa = PBXGroup;
 			children = (
+				484ADB591B57A54000573394 /* Model */,
 				4838DA691B5630FE00D6F6E7 /* Controller */,
+				484ADB691B57C0D000573394 /* View */,
 			);
 			name = History;
 			sourceTree = "<group>";
@@ -414,12 +443,15 @@
 				484A287A1B4F637700398C49 /* AppDelegate.m in Sources */,
 				48BBC4921B549F21006CD7B5 /* CustomNavigationController.m in Sources */,
 				48BBC4951B54DFE9006CD7B5 /* HistoryViewController.m in Sources */,
+				484ADB681B57C0BC00573394 /* HistoryTableViewCell.m in Sources */,
 				4838DA5F1B55372800D6F6E7 /* SubscribeAlertView.m in Sources */,
 				48BBC4861B53D941006CD7B5 /* PublishViewController.m in Sources */,
 				48BBC48F1B53F5ED006CD7B5 /* HomeView.m in Sources */,
+				484ADB5C1B57A6B000573394 /* MQTT.xcdatamodeld in Sources */,
 				4838DA5C1B55342E00D6F6E7 /* HomeAlertViews.m in Sources */,
 				4838DA591B552E2900D6F6E7 /* PublishView.m in Sources */,
 				484A28771B4F637700398C49 /* main.m in Sources */,
+				484ADB651B57A79800573394 /* Message.m in Sources */,
 				48BBC48C1B53F586006CD7B5 /* HomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -621,6 +653,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		484ADB5A1B57A6B000573394 /* MQTT.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				484ADB5B1B57A6B000573394 /* MQTT.xcdatamodel */,
+			);
+			currentVersion = 484ADB5B1B57A6B000573394 /* MQTT.xcdatamodel */;
+			path = MQTT.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 484A28691B4F637700398C49 /* Project object */;
 }
