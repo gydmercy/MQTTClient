@@ -17,7 +17,9 @@
 		484A28911B4F637700398C49 /* MQTTTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 484A28901B4F637700398C49 /* MQTTTests.m */; };
 		484ADB5C1B57A6B000573394 /* MQTT.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 484ADB5A1B57A6B000573394 /* MQTT.xcdatamodeld */; };
 		484ADB651B57A79800573394 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 484ADB641B57A79800573394 /* Message.m */; };
-		484ADB681B57C0BC00573394 /* HistoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 484ADB671B57C0BC00573394 /* HistoryTableViewCell.m */; };
+		48564F761BFB0B4A00C40D8F /* HistoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 48564F741BFB0B4A00C40D8F /* HistoryTableViewCell.m */; };
+		48564F771BFB0B4A00C40D8F /* HistoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48564F751BFB0B4A00C40D8F /* HistoryTableViewCell.xib */; };
+		48564F7D1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 48564F7C1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.m */; };
 		48BBC4831B53D91C006CD7B5 /* SubscribeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC4821B53D91C006CD7B5 /* SubscribeViewController.m */; };
 		48BBC4861B53D941006CD7B5 /* PublishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC4851B53D941006CD7B5 /* PublishViewController.m */; };
 		48BBC48C1B53F586006CD7B5 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC48B1B53F586006CD7B5 /* HomeViewController.m */; };
@@ -56,8 +58,11 @@
 		484ADB5B1B57A6B000573394 /* MQTT.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MQTT.xcdatamodel; sourceTree = "<group>"; };
 		484ADB631B57A79800573394 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		484ADB641B57A79800573394 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		484ADB661B57C0BC00573394 /* HistoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryTableViewCell.h; sourceTree = "<group>"; };
-		484ADB671B57C0BC00573394 /* HistoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTableViewCell.m; sourceTree = "<group>"; };
+		48564F731BFB0B4A00C40D8F /* HistoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryTableViewCell.h; sourceTree = "<group>"; };
+		48564F741BFB0B4A00C40D8F /* HistoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTableViewCell.m; sourceTree = "<group>"; };
+		48564F751BFB0B4A00C40D8F /* HistoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HistoryTableViewCell.xib; sourceTree = "<group>"; };
+		48564F7B1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSLayoutConstraintOnePixelLine.h; sourceTree = "<group>"; };
+		48564F7C1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSLayoutConstraintOnePixelLine.m; sourceTree = "<group>"; };
 		48BBC4811B53D91C006CD7B5 /* SubscribeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscribeViewController.h; sourceTree = "<group>"; };
 		48BBC4821B53D91C006CD7B5 /* SubscribeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubscribeViewController.m; sourceTree = "<group>"; };
 		48BBC4841B53D941006CD7B5 /* PublishViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishViewController.h; sourceTree = "<group>"; };
@@ -246,8 +251,9 @@
 		484ADB691B57C0D000573394 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				484ADB661B57C0BC00573394 /* HistoryTableViewCell.h */,
-				484ADB671B57C0BC00573394 /* HistoryTableViewCell.m */,
+				48564F731BFB0B4A00C40D8F /* HistoryTableViewCell.h */,
+				48564F741BFB0B4A00C40D8F /* HistoryTableViewCell.m */,
+				48564F751BFB0B4A00C40D8F /* HistoryTableViewCell.xib */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -296,6 +302,8 @@
 				484A28791B4F637700398C49 /* AppDelegate.m */,
 				48BBC4901B549F21006CD7B5 /* CustomNavigationController.h */,
 				48BBC4911B549F21006CD7B5 /* CustomNavigationController.m */,
+				48564F7B1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.h */,
+				48564F7C1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.m */,
 			);
 			name = General;
 			sourceTree = "<group>";
@@ -346,7 +354,7 @@
 		484A28691B4F637700398C49 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = Mercy;
 				TargetAttributes = {
 					484A28701B4F637700398C49 = {
@@ -384,6 +392,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				484A28851B4F637700398C49 /* LaunchScreen.xib in Resources */,
+				48564F771BFB0B4A00C40D8F /* HistoryTableViewCell.xib in Resources */,
 				484A28821B4F637700398C49 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -439,14 +448,15 @@
 				484A287A1B4F637700398C49 /* AppDelegate.m in Sources */,
 				48BBC4921B549F21006CD7B5 /* CustomNavigationController.m in Sources */,
 				48BBC4951B54DFE9006CD7B5 /* HistoryViewController.m in Sources */,
-				484ADB681B57C0BC00573394 /* HistoryTableViewCell.m in Sources */,
 				4838DA5F1B55372800D6F6E7 /* SubscribeAlertView.m in Sources */,
 				48BBC4861B53D941006CD7B5 /* PublishViewController.m in Sources */,
 				484ADB5C1B57A6B000573394 /* MQTT.xcdatamodeld in Sources */,
 				4838DA5C1B55342E00D6F6E7 /* HomeAlertViews.m in Sources */,
 				4838DA591B552E2900D6F6E7 /* PublishView.m in Sources */,
+				48564F7D1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.m in Sources */,
 				484A28771B4F637700398C49 /* main.m in Sources */,
 				484ADB651B57A79800573394 /* Message.m in Sources */,
+				48564F761BFB0B4A00C40D8F /* HistoryTableViewCell.m in Sources */,
 				48BBC48C1B53F586006CD7B5 /* HomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -502,6 +512,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -569,6 +580,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = MQTT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mercy.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -581,6 +593,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = MQTT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mercy.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -599,6 +612,7 @@
 				);
 				INFOPLIST_FILE = MQTTTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mercy.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MQTT.app/MQTT";
 			};
@@ -614,6 +628,7 @@
 				);
 				INFOPLIST_FILE = MQTTTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "Mercy.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MQTT.app/MQTT";
 			};

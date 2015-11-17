@@ -23,7 +23,7 @@
 @implementation HistoryViewController
 
 // cell 标识符
-static NSString *const cellIdentifer = @"cellIdentifier";
+static NSString *const cellIdentifer = @"History_Table_View_Cell";
 
 
 #pragma mark - Lifecyle
@@ -31,7 +31,6 @@ static NSString *const cellIdentifer = @"cellIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"历史消息";
-    self.view.backgroundColor = [UIColor yellowColor];
     
     [self initTableView];
     [self fetchMessageFromDB];
@@ -44,10 +43,13 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.tableFooterView = [[UIView alloc] init];
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [self.view addSubview:_tableView];
     
-    // 注册TableViewCell
-    [_tableView registerClass:[HistoryTableViewCell class] forCellReuseIdentifier:cellIdentifer];
+    // 注册 Cell
+    UINib *cellNib = [UINib nibWithNibName:@"HistoryTableViewCell" bundle:nil];
+    [_tableView registerNib:cellNib forCellReuseIdentifier:cellIdentifer];
 }
 
 // 获得 NSManagedObjectContext 对象
@@ -69,7 +71,13 @@ static NSString *const cellIdentifer = @"cellIdentifier";
     
     NSError *error = nil;
     if (![_fetchedResultsController performFetch:&error]) {
-        NSLog(@"读取消息错误，ERROR：%@",error);
+//        NSLog(@"读取消息错误，ERROR：%@",error);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"读取消息错误"
+                                                            message:nil
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"确定"
+                                                  otherButtonTitles:nil, nil];
+        [alertView show];
     }
 }
 
@@ -87,8 +95,9 @@ static NSString *const cellIdentifer = @"cellIdentifier";
         return 0;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     HistoryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifer forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     Message *message  = [_fetchedResultsController objectAtIndexPath:indexPath];
     
@@ -106,7 +115,7 @@ static NSString *const cellIdentifer = @"cellIdentifier";
 #pragma mark - <UITableViewDelegate>
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 60;
+    return 100;
 }
 
 
