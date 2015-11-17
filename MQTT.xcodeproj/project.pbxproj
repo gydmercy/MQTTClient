@@ -21,7 +21,6 @@
 		48BBC4831B53D91C006CD7B5 /* SubscribeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC4821B53D91C006CD7B5 /* SubscribeViewController.m */; };
 		48BBC4861B53D941006CD7B5 /* PublishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC4851B53D941006CD7B5 /* PublishViewController.m */; };
 		48BBC48C1B53F586006CD7B5 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC48B1B53F586006CD7B5 /* HomeViewController.m */; };
-		48BBC48F1B53F5ED006CD7B5 /* HomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC48E1B53F5ED006CD7B5 /* HomeView.m */; };
 		48BBC4921B549F21006CD7B5 /* CustomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC4911B549F21006CD7B5 /* CustomNavigationController.m */; };
 		48BBC4951B54DFE9006CD7B5 /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC4941B54DFE9006CD7B5 /* HistoryViewController.m */; };
 		BBD82E1AF17A3FD3C311B193 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B615E3EE759C4C5A7D5D621C /* libPods.a */; };
@@ -65,8 +64,6 @@
 		48BBC4851B53D941006CD7B5 /* PublishViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishViewController.m; sourceTree = "<group>"; };
 		48BBC48A1B53F586006CD7B5 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		48BBC48B1B53F586006CD7B5 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
-		48BBC48D1B53F5ED006CD7B5 /* HomeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeView.h; sourceTree = "<group>"; };
-		48BBC48E1B53F5ED006CD7B5 /* HomeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeView.m; sourceTree = "<group>"; };
 		48BBC4901B549F21006CD7B5 /* CustomNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomNavigationController.h; sourceTree = "<group>"; };
 		48BBC4911B549F21006CD7B5 /* CustomNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomNavigationController.m; sourceTree = "<group>"; };
 		48BBC4931B54DFE9006CD7B5 /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
@@ -124,8 +121,6 @@
 		4838DA641B5630CC00D6F6E7 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				48BBC48D1B53F5ED006CD7B5 /* HomeView.h */,
-				48BBC48E1B53F5ED006CD7B5 /* HomeView.m */,
 				4838DA5A1B55342E00D6F6E7 /* HomeAlertViews.h */,
 				4838DA5B1B55342E00D6F6E7 /* HomeAlertViews.m */,
 			);
@@ -356,6 +351,7 @@
 				TargetAttributes = {
 					484A28701B4F637700398C49 = {
 						CreatedOnToolsVersion = 6.3;
+						DevelopmentTeam = UF9TSBS8Q3;
 					};
 					484A28891B4F637700398C49 = {
 						CreatedOnToolsVersion = 6.3;
@@ -446,7 +442,6 @@
 				484ADB681B57C0BC00573394 /* HistoryTableViewCell.m in Sources */,
 				4838DA5F1B55372800D6F6E7 /* SubscribeAlertView.m in Sources */,
 				48BBC4861B53D941006CD7B5 /* PublishViewController.m in Sources */,
-				48BBC48F1B53F5ED006CD7B5 /* HomeView.m in Sources */,
 				484ADB5C1B57A6B000573394 /* MQTT.xcdatamodeld in Sources */,
 				4838DA5C1B55342E00D6F6E7 /* HomeAlertViews.m in Sources */,
 				4838DA591B552E2900D6F6E7 /* PublishView.m in Sources */,
@@ -571,6 +566,7 @@
 			baseConfigurationReference = D5A97BB9F7F0D2BA2643A4F8 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = MQTT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -582,6 +578,7 @@
 			baseConfigurationReference = 6C8DF8DDC7A72BD698DDA752 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = MQTT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

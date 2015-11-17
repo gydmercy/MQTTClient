@@ -28,7 +28,6 @@
     [self.window setRootViewController:cnvc];
     [self.window makeKeyAndVisible];
     
-    
     return YES;
 }
 

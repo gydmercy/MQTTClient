@@ -9,7 +9,6 @@
 #import "HomeViewController.h"
 #import "MQTTKit.h"
 #import "MBProgressHUD.h"
-#import "HomeView.h"
 #import "HomeAlertViews.h"
 #import "SubscribeViewController.h"
 #import "PublishViewController.h"
@@ -18,17 +17,18 @@
 #import "Message.h"
 
 
-@interface HomeViewController () <UITextFieldDelegate, UIAlertViewDelegate, MBProgressHUDDelegate>
+@interface HomeViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, strong) HomeView *homeView; // 主界面View
-@property (nonatomic, strong) HomeAlertViews *homeAlertView; // 相关AlertView
-@property (nonatomic, strong) MBProgressHUD *hud; // 提示框
+@property (nonatomic, strong) UITableView *tableView; //!< TableView
+@property (nonatomic, strong) UISwitch *switchButton; //!< 服务开启按钮
+@property (nonatomic, strong) HomeAlertViews *homeAlertView; //!< 相关AlertView
+@property (nonatomic, strong) MBProgressHUD *hud; //!< 提示框
 
-@property (nonatomic, strong) MQTTClient *client; // 客户端对象
-@property (nonatomic, strong) NSString *hostAddress; // 服务器IP地址
-@property (nonatomic, assign) NSString *serviceState; // 服务开启状态
+@property (nonatomic, strong) MQTTClient *client; //!< 客户端对象
+@property (nonatomic, strong) NSString *hostAddress; //!< 服务器IP地址
+@property (nonatomic, assign) NSString *serviceState; //!< 服务开启状态
 
-@property (nonatomic, strong) NSManagedObjectContext *context; // Core Data 上下文
+@property (nonatomic, strong) NSManagedObjectContext *context; //!< Core Data 上下文
 
 @end
 
@@ -48,27 +48,36 @@
                                                                   action:nil];
     self.navigationItem.backBarButtonItem = backButton;
 
-    [self initHomeView];
     [self initHomeAlert];
+    [self initTableView];
     
     [self setupMessageHandler];
     
     // 默认服务是关闭状态
     _serviceState = @"Service_Off";
-    
+    // 默认服务器IP地址为空
+    _hostAddress = @"无";
     
 }
 
 
 #pragma mark - Initialization
 
-- (void)initHomeView {
-    _homeView = [[HomeView alloc] initWithFrame:self.view.bounds];
-    [_homeView.switchButton addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
-    [_homeView.subscirbeButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [_homeView.publishButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [_homeView.historyButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_homeView];
+- (UISwitch *)switchButton {
+    if (!_switchButton) {
+        _switchButton = [[UISwitch alloc] init];
+        _switchButton.on = NO;
+        [_switchButton addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
+    }
+    return _switchButton;
+}
+
+- (void)initTableView {
+    _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+    
+    [self.view addSubview:_tableView];
 }
 
 - (void)initHomeAlert {
@@ -91,7 +100,7 @@
 #pragma mark - HUD
 
 - (void)showHUDWithText:(NSString *)text {
-    _hud = [MBProgressHUD showHUDAddedTo:_homeView animated:YES];
+    _hud = [MBProgressHUD showHUDAddedTo:self.view.window animated:YES];
     _hud.labelText = text;
     
     UIImage *image = [UIImage imageNamed:@"37x-Checkmark.png"];
@@ -100,7 +109,7 @@
 }
 
 - (void)hideHUD {
-    [MBProgressHUD hideHUDForView:_homeView animated:YES];
+    [MBProgressHUD hideHUDForView:self.view.window animated:YES];
 }
 
 
@@ -169,7 +178,9 @@
                     // 移除定时器
                     [connectTimer invalidate];
                     
-                    _homeView.hostIP.text = _homeAlertView.ipTextField.text;
+                    // 显示服务器IP
+                    NSIndexPath *addressIndexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+                    [_tableView reloadRowsAtIndexPaths:@[addressIndexPath] withRowAnimation:UITableViewRowAnimationFade];
                     
                     // 转换为 CustomView 模式
                     _hud.mode = MBProgressHUDModeCustomView;
@@ -181,7 +192,7 @@
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self hideHUD];
-                    [_homeView.switchButton setOn:NO animated:YES];
+                    [self.switchButton setOn:NO animated:YES];
                     [_homeAlertView.failedConnectAlert show];
                 });
             }
@@ -215,7 +226,10 @@
                     // 移除定时器
                     [disconnectTimer invalidate];
                     
-                    _homeView.hostIP.text = @"——";
+                    // 重置服务器IP
+                    _hostAddress = @"无";
+                    NSIndexPath *addressIndexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+                    [_tableView reloadRowsAtIndexPaths:@[addressIndexPath] withRowAnimation:UITableViewRowAnimationFade];
                     
                     //转换为 CustomView 模式
                     _hud.mode = MBProgressHUDModeCustomView;
@@ -227,7 +241,7 @@
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self hideHUD];
-                    [_homeView.switchButton setOn:YES animated:YES];
+                    [self.switchButton setOn:YES animated:YES];
                     [_homeAlertView.failedDisconnectAlert show];
                 });
             }
@@ -249,42 +263,20 @@
     }
 }
 
-// 相关按钮触发动作
-- (void)buttonAction:(id)sender {
-    UIButton *button = (UIButton *)sender;
-    if (button == self.homeView.subscirbeButton) {
-        SubscribeViewController *svc = [[SubscribeViewController alloc] init];
-        // 传值
-        [svc setValue:_serviceState forKey:@"serviceState"];
-        [svc setValue:self.client forKey:@"client"];
-        [self.navigationController pushViewController:svc animated:YES];
-    } else if (button == self.homeView.publishButton) {
-        PublishViewController *pvc = [[PublishViewController alloc] init];
-        // 传值
-        [pvc setValue:_serviceState forKey:@"serviceState"];
-        [pvc setValue:self.client forKey:@"client"];
-        [self.navigationController pushViewController:pvc animated:YES];
-    } else if (button == self.homeView.historyButton) {
-        HistoryViewController *hvc = [[HistoryViewController alloc] init];
-        [self.navigationController pushViewController:hvc animated:YES];
-
-    }
-    
-}
-
 // 连接服务器超时触发动作
 - (void)connectTimeoutAction {
     [self hideHUD];
-    [_homeView.switchButton setOn:NO animated:YES];
+    [self.switchButton setOn:NO animated:YES];
     [_homeAlertView.wrongAddressAlert show];
 }
 
 // 断开服务器超时触发动作
 - (void)disconnectTimeoutAction {
     [self hideHUD];
-    [_homeView.switchButton setOn:YES animated:YES];
+    [self.switchButton setOn:YES animated:YES];
     [_homeAlertView.failedDisconnectAlert show];
 }
+
 
 #pragma mark - Core Data
 
@@ -301,7 +293,6 @@
     }
     
 }
-
 
 
 #pragma mark - <UITextFieldDelegate>
@@ -322,13 +313,24 @@
         switch (buttonIndex) {
             // 点击取消，则不开启服务
             case 0:
-                [_homeView.switchButton setOn:NO animated:YES];
-                _homeView.hostIP.text = @"——";
+                [self.switchButton setOn:NO animated:YES];
+                _hostAddress = @"无";
                 break;
             // 点击确定，则尝试连接服务器
             case 1:
+                // 隐藏键盘
+                [[alertView textFieldAtIndex:0] resignFirstResponder];
+                
                 _hostAddress = _homeAlertView.ipTextField.text;
-                [self connectToHost];
+                
+                // 确保填写的IP非空才连接
+                if ([_hostAddress isEqualToString:@""]) {
+                    [self.switchButton setOn:NO animated:YES];
+                    _hostAddress = @"无";
+                } else {
+                    [self connectToHost];
+                }
+                
                 break;
                 
         }
@@ -338,7 +340,7 @@
         switch (buttonIndex) {
             // 点击取消，则不关闭服务
             case 0:
-                [_homeView.switchButton setOn:YES animated:YES];
+                [self.switchButton setOn:YES animated:YES];
                 break;
             // 点击确定，则尝试断开服务器连接
             case 1:
@@ -352,7 +354,97 @@
 }
 
 
+#pragma mark - <UITableViewDataSource>
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 4;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    if (section == 0) {
+        return 1;
+    } else if (section == 1) {
+        return 1;
+    } else if (section == 2) {
+        return 2;
+    } else {
+        return 1;
+    }
+
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = nil;
+    
+    if (indexPath.section == 0) {
+        
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section0_Cell"];
+        cell.accessoryView = self.switchButton;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.text = @"开启服务";
+        
+    } else if (indexPath.section == 1) {
+        
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Section1_Cell"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.textLabel.text = @"服务器IP：";
+        cell.detailTextLabel.text = _hostAddress;
+        
+    } else if (indexPath.section == 2) {
+        
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section2_Cell"];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"主题订阅";
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = @"发布消息";
+        }
+        
+    } else if (indexPath.section == 3) {
+        
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Section3_Cell"];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        cell.textLabel.text = @"历史消息";
+    }
+    
+    return cell;
+}
+
+
+#pragma mark - <UITableViewDelegate>
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    // 界面跳转
+    if (indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            
+            SubscribeViewController *svc = [[SubscribeViewController alloc] init];
+            [self.navigationController pushViewController:svc animated:YES];
+            // 传值
+            [svc setValue:_serviceState forKey:@"serviceState"];
+            [svc setValue:self.client forKey:@"client"];
+            
+        } else if (indexPath.row == 1) {
+            
+            PublishViewController *pvc = [[PublishViewController alloc] init];
+            [self.navigationController pushViewController:pvc animated:YES];
+            // 传值
+            [pvc setValue:_serviceState forKey:@"serviceState"];
+            [pvc setValue:self.client forKey:@"client"];
+            
+        }
+    } else if (indexPath.section == 3) {
+        HistoryViewController *hvc = [[HistoryViewController alloc] init];
+        [self.navigationController pushViewController:hvc animated:YES];
+    }
+    
+    // 取消选中状态
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
 
 @end
 

@@ -105,7 +105,7 @@
         [_client publishString:content
                         toTopic:topic
                         withQos:AtMostOnce
-                        retain:YES
+                        retain:NO
              completionHandler:^(int mid){
                  // 移除定时器
                  [publishTimer invalidate];
@@ -177,8 +177,6 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
 }
-
-
 
 
 @end
