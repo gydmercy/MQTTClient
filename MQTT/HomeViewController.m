@@ -430,7 +430,8 @@
             
         } else if (indexPath.row == 1) {
             
-            PublishViewController *pvc = [[PublishViewController alloc] init];
+//            PublishViewController *pvc = [[PublishViewController alloc] init];
+            PublishViewController *pvc = [[PublishViewController alloc] initWithNibName:@"PublishView" bundle:[NSBundle mainBundle]];
             [self.navigationController pushViewController:pvc animated:YES];
             // 传值
             [pvc setValue:_serviceState forKey:@"serviceState"];

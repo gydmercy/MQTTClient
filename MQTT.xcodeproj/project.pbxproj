@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4838DA591B552E2900D6F6E7 /* PublishView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4838DA581B552E2900D6F6E7 /* PublishView.m */; };
 		4838DA5C1B55342E00D6F6E7 /* HomeAlertViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 4838DA5B1B55342E00D6F6E7 /* HomeAlertViews.m */; };
 		4838DA5F1B55372800D6F6E7 /* SubscribeAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4838DA5E1B55372800D6F6E7 /* SubscribeAlertView.m */; };
 		484A28771B4F637700398C49 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 484A28761B4F637700398C49 /* main.m */; };
@@ -20,6 +19,8 @@
 		48564F761BFB0B4A00C40D8F /* HistoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 48564F741BFB0B4A00C40D8F /* HistoryTableViewCell.m */; };
 		48564F771BFB0B4A00C40D8F /* HistoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48564F751BFB0B4A00C40D8F /* HistoryTableViewCell.xib */; };
 		48564F7D1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 48564F7C1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.m */; };
+		4873C4C51BFC2E7900FB4F35 /* PublishView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4873C4C41BFC2E7900FB4F35 /* PublishView.xib */; };
+		4873C4C81BFC986100FB4F35 /* TopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4873C4C71BFC986100FB4F35 /* TopicViewController.m */; };
 		48BBC4831B53D91C006CD7B5 /* SubscribeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC4821B53D91C006CD7B5 /* SubscribeViewController.m */; };
 		48BBC4861B53D941006CD7B5 /* PublishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC4851B53D941006CD7B5 /* PublishViewController.m */; };
 		48BBC48C1B53F586006CD7B5 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48BBC48B1B53F586006CD7B5 /* HomeViewController.m */; };
@@ -39,8 +40,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4838DA571B552E2900D6F6E7 /* PublishView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishView.h; sourceTree = "<group>"; };
-		4838DA581B552E2900D6F6E7 /* PublishView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublishView.m; sourceTree = "<group>"; };
 		4838DA5A1B55342E00D6F6E7 /* HomeAlertViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeAlertViews.h; sourceTree = "<group>"; };
 		4838DA5B1B55342E00D6F6E7 /* HomeAlertViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeAlertViews.m; sourceTree = "<group>"; };
 		4838DA5D1B55372800D6F6E7 /* SubscribeAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscribeAlertView.h; sourceTree = "<group>"; };
@@ -63,6 +62,9 @@
 		48564F751BFB0B4A00C40D8F /* HistoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HistoryTableViewCell.xib; sourceTree = "<group>"; };
 		48564F7B1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSLayoutConstraintOnePixelLine.h; sourceTree = "<group>"; };
 		48564F7C1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSLayoutConstraintOnePixelLine.m; sourceTree = "<group>"; };
+		4873C4C41BFC2E7900FB4F35 /* PublishView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PublishView.xib; sourceTree = "<group>"; };
+		4873C4C61BFC986100FB4F35 /* TopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicViewController.h; sourceTree = "<group>"; };
+		4873C4C71BFC986100FB4F35 /* TopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicViewController.m; sourceTree = "<group>"; };
 		48BBC4811B53D91C006CD7B5 /* SubscribeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubscribeViewController.h; sourceTree = "<group>"; };
 		48BBC4821B53D91C006CD7B5 /* SubscribeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubscribeViewController.m; sourceTree = "<group>"; };
 		48BBC4841B53D941006CD7B5 /* PublishViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishViewController.h; sourceTree = "<group>"; };
@@ -155,6 +157,8 @@
 			children = (
 				48BBC4841B53D941006CD7B5 /* PublishViewController.h */,
 				48BBC4851B53D941006CD7B5 /* PublishViewController.m */,
+				4873C4C61BFC986100FB4F35 /* TopicViewController.h */,
+				4873C4C71BFC986100FB4F35 /* TopicViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -162,8 +166,7 @@
 		4838DA681B5630F500D6F6E7 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				4838DA571B552E2900D6F6E7 /* PublishView.h */,
-				4838DA581B552E2900D6F6E7 /* PublishView.m */,
+				4873C4C41BFC2E7900FB4F35 /* PublishView.xib */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -393,6 +396,7 @@
 			files = (
 				484A28851B4F637700398C49 /* LaunchScreen.xib in Resources */,
 				48564F771BFB0B4A00C40D8F /* HistoryTableViewCell.xib in Resources */,
+				4873C4C51BFC2E7900FB4F35 /* PublishView.xib in Resources */,
 				484A28821B4F637700398C49 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -452,7 +456,7 @@
 				48BBC4861B53D941006CD7B5 /* PublishViewController.m in Sources */,
 				484ADB5C1B57A6B000573394 /* MQTT.xcdatamodeld in Sources */,
 				4838DA5C1B55342E00D6F6E7 /* HomeAlertViews.m in Sources */,
-				4838DA591B552E2900D6F6E7 /* PublishView.m in Sources */,
+				4873C4C81BFC986100FB4F35 /* TopicViewController.m in Sources */,
 				48564F7D1BFB476900C40D8F /* NSLayoutConstraintOnePixelLine.m in Sources */,
 				484A28771B4F637700398C49 /* main.m in Sources */,
 				484ADB651B57A79800573394 /* Message.m in Sources */,
@@ -580,7 +584,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = MQTT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Mercy.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = Mercy.MQTT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -593,7 +597,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = MQTT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Mercy.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = Mercy.MQTT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

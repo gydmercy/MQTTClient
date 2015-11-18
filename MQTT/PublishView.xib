@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PublishViewController">
+            <connections>
+                <outlet property="contentTextView" destination="gfZ-Eg-GyO" id="nFF-ag-MAM"/>
+                <outlet property="tableView" destination="V5f-MM-qiB" id="Yxa-ke-pan"/>
+                <outlet property="view" destination="iN0-l3-epB" id="pyb-8x-516"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="V5f-MM-qiB">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <animations/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="520" id="SVB-GH-cma"/>
+                    </constraints>
+                    <view key="tableFooterView" contentMode="scaleToFill" id="7mW-9G-YyX" userLabel="FooterView">
+                        <rect key="frame" x="0.0" y="411" width="600" height="189"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gfZ-Eg-GyO">
+                                <rect key="frame" x="0.0" y="40" width="600" height="129"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <connections>
+                                    <outlet property="delegate" destination="-1" id="hck-TM-qCc"/>
+                                </connections>
+                            </textView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eW0-X9-2yc" userLabel="UpSeprator">
+                                <rect key="frame" x="0.0" y="40" width="600" height="1"/>
+                                <animations/>
+                                <color key="backgroundColor" red="0.7843137255" green="0.78039215689999997" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="ZGT-MO-E1T" customClass="NSLayoutConstraintOnePixelLine"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dN2-vK-ZF3" userLabel="BottomSeprator">
+                                <rect key="frame" x="0.0" y="168" width="600" height="1"/>
+                                <animations/>
+                                <color key="backgroundColor" red="0.78431372549019607" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="0sV-nL-nHJ" customClass="NSLayoutConstraintOnePixelLine"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请输入消息正文" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aWr-gf-5Oy" userLabel="PleaseInputContent">
+                                <rect key="frame" x="14" y="15" width="100" height="21"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="cNy-1V-ZOv"/>
+                                    <constraint firstAttribute="height" constant="21" id="j0v-4U-9Fk"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" red="0.46274509803921571" green="0.46274509803921571" blue="0.4823529411764706" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="dN2-vK-ZF3" firstAttribute="leading" secondItem="7mW-9G-YyX" secondAttribute="leading" id="AcX-Jg-j9r"/>
+                            <constraint firstItem="gfZ-Eg-GyO" firstAttribute="top" secondItem="7mW-9G-YyX" secondAttribute="top" constant="40" id="C2q-Vj-GfC"/>
+                            <constraint firstAttribute="bottom" secondItem="gfZ-Eg-GyO" secondAttribute="bottom" constant="20" id="JCW-0M-6Ia"/>
+                            <constraint firstItem="eW0-X9-2yc" firstAttribute="leading" secondItem="7mW-9G-YyX" secondAttribute="leading" id="clH-CZ-Z2l"/>
+                            <constraint firstAttribute="bottom" secondItem="dN2-vK-ZF3" secondAttribute="bottom" constant="20" id="f92-Zq-mEy"/>
+                            <constraint firstAttribute="trailing" secondItem="eW0-X9-2yc" secondAttribute="trailing" id="kb8-h8-30c"/>
+                            <constraint firstAttribute="trailing" secondItem="dN2-vK-ZF3" secondAttribute="trailing" id="pue-Zs-DLD"/>
+                            <constraint firstItem="aWr-gf-5Oy" firstAttribute="leading" secondItem="7mW-9G-YyX" secondAttribute="leading" constant="14" id="q32-iH-sTH"/>
+                            <constraint firstItem="eW0-X9-2yc" firstAttribute="top" secondItem="aWr-gf-5Oy" secondAttribute="bottom" constant="4" id="qtF-Zn-dai"/>
+                            <constraint firstItem="gfZ-Eg-GyO" firstAttribute="leading" secondItem="7mW-9G-YyX" secondAttribute="leading" id="vm7-sR-0Lg"/>
+                            <constraint firstAttribute="trailing" secondItem="gfZ-Eg-GyO" secondAttribute="trailing" id="wrA-0D-owI"/>
+                            <constraint firstItem="eW0-X9-2yc" firstAttribute="top" secondItem="7mW-9G-YyX" secondAttribute="top" constant="40" id="zGV-7D-TsP"/>
+                            <constraint firstItem="dN2-vK-ZF3" firstAttribute="top" secondItem="7mW-9G-YyX" secondAttribute="top" constant="20" id="zis-aN-slV"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="zis-aN-slV"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="SVB-GH-cma"/>
+                        </mask>
+                    </variation>
+                </tableView>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="V5f-MM-qiB" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Boi-ff-Dbv"/>
+                <constraint firstAttribute="bottom" secondItem="V5f-MM-qiB" secondAttribute="bottom" id="jgl-qk-ht9"/>
+                <constraint firstItem="V5f-MM-qiB" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="p9o-dd-Uef"/>
+                <constraint firstAttribute="trailing" secondItem="V5f-MM-qiB" secondAttribute="trailing" id="rMt-3X-fIO"/>
+            </constraints>
+        </view>
+    </objects>
+</document>
