@@ -119,6 +119,7 @@
 - (MQTTClient *)client {
     if (!_client) {
         NSString *clientID = [[UIDevice currentDevice] identifierForVendor].UUIDString;
+//        NSLog(@"%@", clientID);
         _client = [[MQTTClient alloc] initWithClientId:clientID];
     }
     return _client;

@@ -101,7 +101,7 @@ static NSString *const cellIdentifer = @"History_Table_View_Cell";
     
     Message *message  = [_fetchedResultsController objectAtIndexPath:indexPath];
     
-    cell.typeLabel.text = message.type;
+    cell.typeLabel.text = [NSString stringWithFormat:@"[%@]", message.type];
     cell.contentLabel.text = message.content;
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
