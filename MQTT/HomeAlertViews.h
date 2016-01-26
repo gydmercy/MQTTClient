@@ -16,5 +16,6 @@
 @property (nonatomic, strong) UIAlertView *wrongAddressAlert; // 提示用户检查服务器地址
 @property (nonatomic, strong) UIAlertView *failedDisconnectAlert; // 提示用户关闭服务失败
 @property (nonatomic, strong) UITextField *ipTextField; // configHostAlertView中输入IP地址的TextField
+@property (nonatomic, strong) UITextField *portTextField; // configHostAlertView中输入端口号的TextField
 
 @end

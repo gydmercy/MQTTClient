@@ -25,7 +25,9 @@
 @property (nonatomic, strong) MBProgressHUD *hud; //!< 提示框
 
 @property (nonatomic, strong) MQTTClient *client; //!< 客户端对象
-@property (nonatomic, strong) NSString *hostAddress; //!< 服务器IP地址
+@property (nonatomic, strong) NSString *hostIP; //!< 服务器IP地址
+@property (nonatomic, strong) NSString *hostPort; //!< 服务器端口号
+@property (nonatomic, strong) NSString *hostAddress; //!< 服务器IP地址 + 端口号
 @property (nonatomic, assign) NSString *serviceState; //!< 服务开启状态
 
 @property (nonatomic, strong) NSManagedObjectContext *context; //!< Core Data 上下文
@@ -56,6 +58,8 @@
     // 默认服务是关闭状态
     _serviceState = @"Service_Off";
     // 默认服务器IP地址为空
+    _hostIP = @"";
+    _hostPort = @"";
     _hostAddress = @"无";
     
 }
@@ -164,7 +168,10 @@
     
     // 异步连接服务器
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [self.client connectToHost:_hostAddress completionHandler:^(MQTTConnectionReturnCode code) {
+        // 设置连接到服务器的端口
+        self.client.port = _hostPort.intValue;
+        // 开始连接
+        [self.client connectToHost:_hostIP completionHandler:^(MQTTConnectionReturnCode code) {
             // 连接成功
             if (code == ConnectionAccepted) {
                 
@@ -227,7 +234,9 @@
                     // 移除定时器
                     [disconnectTimer invalidate];
                     
-                    // 重置服务器IP
+                    // 重置服务器
+                    _hostIP = @"";
+                    _hostPort = @"";
                     _hostAddress = @"无";
                     NSIndexPath *addressIndexPath = [NSIndexPath indexPathForRow:0 inSection:1];
                     [_tableView reloadRowsAtIndexPaths:@[addressIndexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -315,6 +324,8 @@
             // 点击取消，则不开启服务
             case 0:
                 [self.switchButton setOn:NO animated:YES];
+                _hostIP = @"";
+                _hostPort = @"";
                 _hostAddress = @"无";
                 break;
             // 点击确定，则尝试连接服务器
@@ -322,11 +333,14 @@
                 // 隐藏键盘
                 [[alertView textFieldAtIndex:0] resignFirstResponder];
                 
-                _hostAddress = _homeAlertView.ipTextField.text;
+                _hostIP = _homeAlertView.ipTextField.text;
+                _hostPort = _homeAlertView.portTextField.text;
                 
                 // 确保填写的IP非空才连接
-                if ([_hostAddress isEqualToString:@""]) {
+                if ([_hostIP isEqualToString:@""] || [_hostPort isEqualToString:@""]) {
                     [self.switchButton setOn:NO animated:YES];
+                    _hostIP = @"";
+                    _hostPort = @"";
                     _hostAddress = @"无";
                 } else {
                     [self connectToHost];
@@ -389,7 +403,14 @@
         
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Section1_Cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.textLabel.text = @"服务器IP：";
+        cell.textLabel.text = @"服务器：";
+        
+        if ([_hostIP isEqualToString:@""] || [_hostPort isEqualToString:@""]) {
+            _hostAddress = @"无";
+        } else {
+            _hostAddress = [NSString stringWithFormat:@"%@ : %@", _hostIP, _hostPort];
+        }
+        
         cell.detailTextLabel.text = _hostAddress;
         
     } else if (indexPath.section == 2) {

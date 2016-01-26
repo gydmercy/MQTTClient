@@ -13,19 +13,28 @@
 
 - (UIAlertView *)configHostAlert {
     if (!_configHostAlert) {
-        _configHostAlert = [[UIAlertView alloc] initWithTitle:@"请设置服务器IP"
+        _configHostAlert = [[UIAlertView alloc] initWithTitle:@"请设置服务器"
                                                       message:nil
                                                      delegate:nil
                                             cancelButtonTitle:@"取消"
                                             otherButtonTitles:@"确定", nil];
-        _configHostAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        _configHostAlert.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
         
         // 取出 AlertView 的输入框
         _ipTextField = [_configHostAlert textFieldAtIndex:0];
-        _ipTextField.clearsOnBeginEditing = YES;
+        _ipTextField.placeholder = @"请输入服务器IP地址";
+//        _ipTextField.clearsOnBeginEditing = YES;
         _ipTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _ipTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         _ipTextField.returnKeyType = UIReturnKeyDone;
+        
+        _portTextField = [_configHostAlert textFieldAtIndex:1];
+        _portTextField.placeholder = @"请输入服务器端口号";
+//        _portTextField.clearsOnBeginEditing = YES;
+        _portTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _portTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+        _portTextField.returnKeyType = UIReturnKeyDone;
+        _portTextField.secureTextEntry = NO;
     }
     return _configHostAlert;
 }
